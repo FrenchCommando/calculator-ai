@@ -49,7 +49,7 @@ deploy/nginx/      host-nginx server block for the Pi
 
 ### Adding an app
 
-Create `apps/<id>/model.js` exporting `meta` and `infer(level, body)` where `level` is 0 free, 1 pro, 2 max, and `body` is whatever the page posts to `/api/infer`. Return `{ result, cost, trace }` or `{ error, code: 'plan' }`. Create `apps/<id>/public/index.html` with `<div id="ai-status">`, `<div id="ai-trace">`, `<section id="ai-pricing">`, include `/ai.js`, call `AI.init()`, and use `AI.infer({...})`. Add `<id>.http.nyc` to `deploy/nginx/http-nyc-ai.conf` (and the nginx config on the Pi, then re-run certbot with the new name), to the HOSTS line in pi-deploy's `deploy.yml`, and to the DNS wildcard nothing (it already covers it). Plan gating: return `{ error, code: 'plan' }` from `infer`, and mark UI controls with `data-level="1|2"`; the page's `AI.onAccount` callback toggles a `locked` class.
+Create `apps/<id>/model.js` exporting `meta` and `infer(level, body)` where `level` is 0 free, 1 pro, 2 max, and `body` is whatever the page posts to `/api/infer`. Return `{ result, cost, trace }` or `{ error, code: 'plan' }`. Create `apps/<id>/public/index.html` with `<div id="ai-status">`, `<div id="ai-trace">`, `<section id="ai-pricing">`, include `/ai.js`, call `AI.init()`, and use `AI.infer({...})`. Add `<id>.http.nyc` to `deploy/nginx/http-nyc-ai.conf` (and the nginx config on the Pi, then re-run certbot with the new name), and to the HOSTS line in pi-deploy's `deploy.yml`. DNS needs nothing: the `*.http.nyc` wildcard covers it. Plan gating: return `{ error, code: 'plan' }` from `infer`, and mark UI controls with `data-level="1|2"`; the page's `AI.onAccount` callback toggles a `locked` class.
 
 ## Stripe (one account for all apps)
 
