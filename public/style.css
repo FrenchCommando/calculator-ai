@@ -134,3 +134,11 @@ code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-si
 .keys button.pressed { background: #3a4460; }
 .keys button.locked { opacity: .35; cursor: not-allowed; }
 .logo a.home { color: inherit; text-decoration: none; }
+.cta.big { display: block; width: 100%; text-align: center; font-size: 18px; padding: 18px; border: 0; cursor: pointer; font-family: inherit; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.chip { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); font-size: 13px; cursor: pointer; font-family: inherit; }
+.chip:hover { background: #262d3f; }
+.chip.active { border-color: var(--accent); color: #cfc3ff; }
+.chip.locked { opacity: .4; cursor: not-allowed; }
+.form[hidden] { display: none; }
+#inputs { margin-top: 12px; }

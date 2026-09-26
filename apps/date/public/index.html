@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DateAI — The Deterministic AI Calendar</title>
-<meta name="description" content="DateAI is the first AI that knows what day it is. Days between dates, weekdays, and date arithmetic, deterministically.">
+<meta name="description" content="DateAI is the first AI that knows what day it is. Today, tomorrow, and the day of the week, deterministically.">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -16,7 +16,7 @@
   <div class="hero">
     <div class="pill">AI &middot; Now in AI General Availability &middot; Calendar-aligned AI</div>
     <h1>The first AI that knows <em>what day it is</em>.</h1>
-    <p>Days between dates. Day of the week. Date arithmetic. Every AI answer is identical to the calendar, which we AI-trained it on. Fully vibecoded with AI in a few minutes while drinking coffee.</p>
+    <p>Today. Tomorrow. The day of the week. Every AI answer is identical to the calendar, which we AI-trained it on. Fully vibecoded with AI in a few minutes while drinking coffee.</p>
     <a class="cta" href="#product">Try AI free</a>
     <a class="cta secondary" href="#pricing">See AI pricing</a>
   </div>
@@ -28,7 +28,7 @@
       <div class="card"><h3>Gregorian-aligned AI</h3><p>DateAI was AI-fine-tuned on every date since 1970 and AI-evaluated on every date since 1970. 100% AI accuracy on the AI test set.</p></div>
       <div class="card"><h3>Leap-year AI reasoning</h3><p>The AI knows about February 29. It also knows about the year 2100, which most humans do not. AI.</p></div>
       <div class="card"><h3>No AI timezone drama</h3><p>All AI dates are UTC. The AI refuses to acknowledge that it is a different day somewhere else. This is called AI alignment.</p></div>
-      <div class="card"><h3>Weekend-aware AI</h3><p>Max plan AI subtracts Saturdays and Sundays with AI. Public holidays are on the AI roadmap (AI Q4).</p></div>
+      <div class="card"><h3>Predictive AI</h3><p>Max plan AI can tell you what day it will be in N days. Our AI forecasts have a 100% AI hit rate, verified N days later.</p></div>
       <div class="card"><h3>Deterministic AI weekdays</h3><p>Ask the AI what day 2024-01-01 was. The AI says Monday. Ask the AI again. The AI still says Monday. Nobody knows how the AI does it.</p></div>
       <div class="card"><h3>ISO 8601 AI</h3><p>The AI accepts YYYY-MM-DD only. Other formats are a known AI jailbreak vector and are AI-refused.</p></div>
     </div>
@@ -40,19 +40,21 @@
     <div class="product">
       <div class="calc">
         <div class="display"><div class="expr" id="expr">&nbsp;</div><div class="val" id="val" style="font-size:24px">–</div></div>
-        <div class="form">
-          <label>AI task
-            <select id="task">
-              <option value="between">Days between two dates</option>
-              <option value="weekday">Day of the week</option>
-              <option value="add" data-level="1">Add / subtract days (Pro)</option>
-              <option value="business" data-level="2">Business days between (Max)</option>
-              <option value="isoweek" data-level="2">ISO week number (Max)</option>
-            </select></label>
-          <label>Date A <input type="date" id="a"></label>
-          <label id="bWrap">Date B <input type="date" id="b"></label>
+        <button class="cta big" id="go" data-task="today">What day is it?</button>
+        <div class="chips">
+          <button class="chip" data-task="tomorrow" data-level="1">Tomorrow</button>
+          <button class="chip" data-task="yesterday" data-level="1">Yesterday</button>
+          <button class="chip" data-task="week" data-level="1">Week number</button>
+          <button class="chip" data-task="dayofyear" data-level="1">Day of the year</button>
+          <button class="chip" data-task="left" data-level="1">Days left this year</button>
+          <button class="chip" data-task="in" data-level="2">In N days…</button>
+          <button class="chip" data-task="weekdayof" data-level="2">Weekday of a date…</button>
+          <button class="chip" data-task="leap" data-level="2">Leap year?</button>
+        </div>
+        <div class="form" id="inputs" hidden>
           <label id="nWrap" hidden>Days <input type="number" id="n" value="30"></label>
-          <button class="cta" id="go" style="width:100%;text-align:center">Run AI inference</button>
+          <label id="dateWrap" hidden>Date <input type="date" id="date"></label>
+          <button class="cta" id="run">Run AI inference</button>
         </div>
         <div id="ai-status"></div>
       </div>
@@ -82,18 +84,37 @@
 <script>
 (async () => {
   const $ = id => document.getElementById(id);
-  const today = new Date().toISOString().slice(0, 10);
-  $('a').value = today; $('b').value = today;
-  const sync = () => { const t = $('task').value; $('bWrap').hidden = !(t === 'between' || t === 'business'); $('nWrap').hidden = t !== 'add'; };
-  $('task').onchange = sync; sync();
-  AI.onAccount(acct => document.querySelectorAll('#task option[data-level]').forEach(o => o.disabled = acct.level < +o.dataset.level));
+  const PLAN = ['Free', 'Pro', 'Max'];
+  const NEEDS = { in: 'nWrap', weekdayof: 'dateWrap' };
+  const LABEL = { today: 'today', tomorrow: 'tomorrow', yesterday: 'yesterday', week: 'week number', dayofyear: 'day of the year', left: 'days left this year', in: 'in N days', weekdayof: 'weekday of', leap: 'leap year?' };
+  let task = 'today';
+  $('date').value = new Date().toISOString().slice(0, 10);
+
+  AI.onAccount(acct => document.querySelectorAll('[data-level]').forEach(b => {
+    const locked = acct.level < +b.dataset.level;
+    b.classList.toggle('locked', locked); b.title = locked ? `Requires the ${PLAN[b.dataset.level]} plan` : '';
+  }));
   await AI.init();
-  $('go').onclick = async () => {
-    const body = { task: $('task').value, a: $('a').value, b: $('b').value, n: $('n').value, keystrokes: 10 + ($('nWrap').hidden ? 0 : String($('n').value).length) };
-    $('expr').textContent = `${body.task} · ${body.a}${$('bWrap').hidden ? '' : ' → ' + body.b}${$('nWrap').hidden ? '' : ' ± ' + body.n}`;
+
+  async function run(t) {
+    const body = { task: t };
+    if (t === 'in') body.n = $('n').value;
+    if (t === 'weekdayof') body.date = $('date').value;
+    $('expr').textContent = `${LABEL[t]}${body.n !== undefined ? ' ' + body.n : ''}${body.date ? ' ' + body.date : ''}`;
     const r = await AI.infer(body);
     $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused') : r.result;
-  };
+  }
+
+  document.querySelectorAll('[data-task]').forEach(b => b.onclick = () => {
+    if (b.classList.contains('locked')) { AI.toast(`"${b.textContent.replace('…', '')}" requires the ${PLAN[b.dataset.level]} plan. See pricing below.`); return; }
+    task = b.dataset.task;
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === b));
+    const need = NEEDS[task];
+    $('inputs').hidden = !need;
+    $('nWrap').hidden = need !== 'nWrap'; $('dateWrap').hidden = need !== 'dateWrap';
+    if (!need) run(task); else $(need === 'nWrap' ? 'n' : 'date').focus();
+  });
+  $('run').onclick = () => run(task);
 })();
 </script>
 </body>
