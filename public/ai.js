@@ -188,7 +188,13 @@ window.AI = (() => {
     const d = await api('/api/infer', { method: 'POST', body: JSON.stringify({ key: acct.key, ...body }) });
     if (d.account) { acct = d.account; renderAccount(); }
     if (!d.ok) {
-      if (d.code === 'quota') trace('AIRateLimitError: insufficient AI tokens. See pricing.', true);
+      if (d.code === 'quota') {
+        const msgs = acct?.plan === 'free'
+          ? ['AIRateLimitError: you have used all 250 free AI tokens today. The AI is proud of you and also would like $20.', 'The free AI tier resets at midnight UTC. The Pro AI tier resets your relationship with arithmetic.']
+          : ['AIRateLimitError: monthly AI tokens exhausted. Impressive. Concerning. Impressive.', 'Your allowance resets on the next invoice. Or upgrade, and reset it with money.'];
+        msgs.forEach((m, i) => trace(m, i === 0));
+        toast(acct?.plan === 'free' ? 'Out of free AI tokens for today. Pro is $20 a month, which is less than one coffee per day, which is what this was built on.' : 'Out of AI tokens this month. Manage subscription, or wait, or Max.');
+      }
       else trace(d.error || 'AI error', true);
       if (d.code === 'plan') toast(d.error);
       return { error: d.error, code: d.code };
