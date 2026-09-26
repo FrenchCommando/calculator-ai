@@ -116,6 +116,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Always answer API errors as JSON (bad JSON bodies, thrown handlers).
 app.use((err, req, res, _next) => {
+  if (!err.status || err.status >= 500) console.error(req.method, req.hostname, req.path, err.stack || err);
   if (req.path.startsWith('/api/')) return res.status(err.status || 500).json({ error: err.status === 400 ? 'Malformed request body.' : 'Server error.' });
   res.status(err.status || 500).send('Server error.');
 });
