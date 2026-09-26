@@ -97,6 +97,27 @@ app.get('/api/session', async (req, res) => {
 });
 
 // Lost key: email it to the checkout address. Same reply whether or not a key exists.
+// Enterprise lead: email it to SALES_EMAIL. Small, rate-limited per IP so the form can't be used to spam us.
+const leadTimes = new Map();
+app.post('/api/enterprise', async (req, res) => {
+  if (!mailEnabled || !SALES_EMAIL) return res.status(503).json({ error: 'AI sales is not reachable yet. Email ' + (SALES_EMAIL || 'us') + ' directly.' });
+  const email = String(req.body.email || '').trim().slice(0, 200), company = String(req.body.company || '').trim().slice(0, 200), message = String(req.body.message || '').trim().slice(0, 4000);
+  if (!/^[^@s]+@[^@s]+.[^@s]+$/.test(email)) return res.status(400).json({ error: 'Invalid email.' });
+  const ip = req.ip, now = Date.now();
+  if (now - (leadTimes.get(ip) || 0) < 60000) return res.status(429).json({ error: 'One AI lead per minute, please.' });
+  leadTimes.set(ip, now);
+  const ok = await sendMail({ to: SALES_EMAIL, subject: `[http.nyc AI] Enterprise lead from ${email}${company ? ' (' + company + ')' : ''}`,
+    text: `App: ${req.body.app || '?'}
+From: ${email}
+Company: ${company || '-'}
+IP: ${ip}
+
+${message || '(no message)'}
+` });
+  if (!ok) return res.status(502).json({ error: 'Could not deliver to AI sales. Try again later.' });
+  res.json({ ok: true });
+});
+
 app.post('/api/recover', async (req, res) => {
   if (!mailEnabled) return res.status(503).json({ error: 'Key recovery is not set up yet. Reply to your Stripe receipt instead.' });
   const email = String(req.body.email || '').trim();

@@ -145,3 +145,7 @@ code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-si
 nav a.nav-home { color: var(--accent-2); border: 1px solid rgba(46,230,166,.4); border-radius: 999px; padding: 5px 12px; background: rgba(46,230,166,.08); }
 nav a.nav-home:hover { background: rgba(46,230,166,.18); }
 .cta.disabled { opacity: .5; pointer-events: none; }
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; z-index: 30; padding: 16px; }
+.modal[hidden] { display: none; }
+.modal-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 460px; }
+.modal-card h3 { margin: 0 0 6px; }

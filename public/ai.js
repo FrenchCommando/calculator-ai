@@ -78,11 +78,7 @@ window.AI = (() => {
       const p = a.dataset.plan;
       if (p === 'free') return;
       e.preventDefault();
-      if (p === 'enterprise') {
-        if (config.salesEmail) location.href = `mailto:${config.salesEmail}?subject=${encodeURIComponent(config.app?.name || 'AI')}%20Enterprise%20AI&body=We%20need%20more%20AI.`;
-        else toast('AI sales will reach out within 3 to 5 AI business quarters.');
-        return;
-      }
+      if (p === 'enterprise') { openSales(); return; }
       if (p === acct?.plan) return;
       const label = a.textContent; a.textContent = 'Redirecting to AI checkout…';
       const d = await api('/api/checkout', { method: 'POST', body: JSON.stringify({ plan: p }) });
@@ -93,6 +89,35 @@ window.AI = (() => {
   function mountFamily() {
     const host = $('ai-family'); if (!host) return;
     host.innerHTML = config.apps.map(a => `<a class="card" style="text-decoration:none;color:inherit${a.id === config.app?.id ? ';border-color:var(--accent)' : ''}" href="${a.url}"><h3>${a.name}</h3><p>${a.tagline}</p></a>`).join('');
+  }
+  // Enterprise lead form: posts to /api/enterprise, which emails SALES_EMAIL.
+  function openSales() {
+    let m = $('sales'); if (m) { m.hidden = false; $('salesEmail').focus(); return; }
+    m = document.createElement('div'); m.id = 'sales'; m.className = 'modal';
+    m.innerHTML = `<div class="modal-card">
+      <h3>Talk to AI sales</h3>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 14px">Tell the AI about your AI needs. A human (AI) will reply within 3 to 5 AI business quarters.</p>
+      <div class="form">
+        <label>Your email <input id="salesEmail" type="email" placeholder="you@company.ai"></label>
+        <label>Company (optional) <input id="salesCompany" placeholder="AI Corp"></label>
+        <label>How much AI do you need? <textarea id="salesMsg" rows="4" placeholder="We need 2M AI tokens a month and a forward-deployed AI arithmetician."></textarea></label>
+        <div class="row"><button class="cta" id="salesSend">Send to AI sales</button><button class="btn" id="salesClose">Cancel</button></div>
+      </div></div>`;
+    document.body.appendChild(m);
+    m.addEventListener('click', e => { if (e.target === m) m.hidden = true; });
+    $('salesClose').onclick = () => { m.hidden = true; };
+    $('salesSend').onclick = async () => {
+      const email = $('salesEmail').value.trim(), message = $('salesMsg').value.trim(), company = $('salesCompany').value.trim();
+      if (!/^[^@s]+@[^@s]+.[^@s]+$/.test(email)) return toast('Enter a valid email so AI sales can AI-reply.');
+      $('salesSend').disabled = true;
+      const d = await api('/api/enterprise', { method: 'POST', body: JSON.stringify({ email, company, message, app: config.app?.id }) });
+      $('salesSend').disabled = false;
+      if (!d.ok) return toast(d.error || 'AI sales is unavailable. Try again later.');
+      m.hidden = true; $('salesMsg').value = '';
+      toast('Sent. AI sales will reach out within 3 to 5 AI business quarters.');
+      trace('Enterprise AI lead submitted to AI sales.', true);
+    };
+    $('salesEmail').focus();
   }
   function mountCounter() {
     const nav = document.querySelector('nav'); if (!nav) return;
