@@ -57,7 +57,7 @@ Keys are emailed at purchase and on "Lost key?". Delivery is direct from the hos
 
 - Outbound port 25 open on the host's network.
 - An SPF record on the sending domain that lists the host's public IP, or Gmail and Outlook refuse the mail outright (`550 5.7.26`). http.nyc's TXT record: `v=spf1 ip4:<pi public ip> include:spf.efwd.registrar-servers.com ~all`. Update the IP if it changes.
-- `MAIL_FROM` set in the env. Empty disables email; "Lost key?" then says recovery isn't set up.
+- Nothing in the env: the from address and EHLO name derive from `ROOT_DOMAIN`. `MAIL_FROM=off` disables it.
 
 Expect spam folders anyway. There is no DKIM.
 
