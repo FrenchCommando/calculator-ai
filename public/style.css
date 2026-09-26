@@ -131,3 +131,4 @@
 .form .chk { flex-direction: row; align-items: center; gap: 6px; flex: 0 0 auto; }
 .form .cta { cursor: pointer; border: 0; font-size: 15px; font-family: inherit; }
 code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+.keys button.pressed { background: #3a4460; }

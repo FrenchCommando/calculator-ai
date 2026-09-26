@@ -46,7 +46,7 @@
 
   <section id="product">
     <h2>Meet the AI model, AI</h2>
-    <p class="sub">CalcAI-1 (4-bit AI-quantized, 10-key AI architecture). Every AI keystroke is an AI token. AI tokens are AI-billed. This is the AI industry AI standard.</p>
+    <p class="sub">CalcAI-1 (4-bit AI-quantized, 10-key AI architecture). Every AI keystroke is an AI token. AI tokens are AI-billed. This is the AI industry AI standard. Keyboard works: digits, + − × ÷ (x or *), Enter, Esc.</p>
     <div class="product">
       <div class="calc">
         <div class="display">
@@ -122,7 +122,26 @@
     out = r.result; cur = r.result; prev = null; op = null; fresh = true; keystrokes = 0; render(); return true;
   }
 
-  document.querySelector('.keys').addEventListener('click', async e => {
+  // Keyboard: digits, . + - * / x, Enter or =, Escape or Backspace-on-empty for AC, % and _ (±).
+  const keys = document.querySelector('.keys');
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey || e.metaKey || e.altKey || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
+    const k = e.key;
+    const sel = /^[0-9.]$/.test(k) ? `[data-num="${k}"]`
+      : k === 'x' || k === 'X' ? '[data-op="*"]'
+      : /^[+\-*/]$/.test(k) ? `[data-op="${k}"]`
+      : k === 'Enter' || k === '=' ? '[data-act="eq"]'
+      : k === 'Escape' || k === 'Delete' ? '[data-act="clear"]'
+      : k === '%' ? '[data-act="pct"]'
+      : k === '_' ? '[data-act="neg"]'
+      : null;
+    if (!sel) return;
+    e.preventDefault();
+    const b = keys.querySelector(sel);
+    if (b && !b.disabled) { b.click(); b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 120); }
+  });
+
+  keys.addEventListener('click', async e => {
     const b = e.target.closest('button'); if (!b || b.disabled) return;
     if (b.dataset.num !== undefined) {
       const d = b.dataset.num;
