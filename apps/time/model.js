@@ -9,7 +9,8 @@ export const meta = {
 };
 
 const tzValid = tz => { try { Intl.DateTimeFormat('en-US', { timeZone: tz }); return true; } catch { return false; } };
-const fmt = (t, tz, ms) => new Intl.DateTimeFormat('en-GB', { timeZone: tz, dateStyle: 'medium', timeStyle: 'long', ...(ms ? { fractionalSecondDigits: 3 } : {}) }).format(t);
+// dateStyle/timeStyle cannot be combined with fractionalSecondDigits, so spell the components out.
+const fmt = (t, tz, ms) => new Intl.DateTimeFormat('en-GB', { timeZone: tz, day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZoneName: 'short', ...(ms ? { fractionalSecondDigits: 3 } : {}) }).format(t);
 
 export function infer(level, { task = 'now', tz = 'UTC', hours = 0, keystrokes }) {
   if (tz !== 'UTC' && level < 1) return { error: 'Timezones other than UTC require the Pro plan.', code: 'plan' };
