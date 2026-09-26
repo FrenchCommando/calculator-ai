@@ -23,7 +23,7 @@
   <div class="card" style="margin:24px 0">
     <div style="font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Your AI license key</div>
     <div class="keybox" id="key">…</div>
-    <div class="share"><button class="btn" id="copy">Copy key</button><a class="btn" id="mail" href="#" style="text-decoration:none">It's also in your email (check spam, the AI is new here)</a></div>
+    <div class="share"><button class="btn" id="copy">Copy key</button><span class="btn" style="cursor:default">It's also in your email (check spam, the AI is new here)</span></div>
   </div>
 
   <div class="card receipt" id="receipt" hidden>
@@ -54,27 +54,15 @@
   $('blurb').innerHTML = d.plan === 'max'
     ? 'You paid <b>$200 a month</b> for a calculator. The AI has never seen this level of commitment. Neither has the human. Both are moved.'
     : 'Multiplication is now available to you. The AI has been carrying the 1 without you for long enough.';
-  $('rPrice').textContent = '$' + price + '.00'; $('rTokens').textContent = d.limit.toLocaleString(); $('rTotal').textContent = '
+  $('rPrice').textContent = '$' + price + '.00';
+  $('rTokens').textContent = d.limit.toLocaleString();
+  $('rTotal').textContent = '$' + price + '.00' + (cfg.live ? '' : ' (test mode, so: $0.00. The AI still counts it.)');
   $('receipt').hidden = false;
   $('bragline').textContent = d.plan === 'max'
     ? 'Screenshot this page. Nobody will believe you. That is the AI Max experience.'
     : 'Every AI app under http.nyc now respects you slightly more.';
   $('bragline').hidden = false;
   $('copy').onclick = () => navigator.clipboard.writeText(d.key).then(() => { $('copy').textContent = 'Copied (deterministically)'; });
-  $('mail').onclick = e => { e.preventDefault(); };
-  try { localStorage.setItem('ai_key', d.key); } catch {}
-})();
-</script>
-</body>
-</html>
- + price + '.00' + (cfg.live ? '' : ' (test mode, so: $0.00. The AI still counts it.)');
-  $('receipt').hidden = false;
-  $('bragline').textContent = d.plan === 'max'
-    ? 'Screenshot this page. Nobody will believe you. That is the AI Max experience.'
-    : 'Every AI app under http.nyc now respects you slightly more.';
-  $('bragline').hidden = false;
-  $('copy').onclick = () => navigator.clipboard.writeText(d.key).then(() => { $('copy').textContent = 'Copied (deterministically)'; });
-  $('mail').onclick = e => { e.preventDefault(); };
   try { localStorage.setItem('ai_key', d.key); } catch {}
 })();
 </script>
