@@ -51,6 +51,16 @@ Test card: 4242 4242 4242 4242, any future date, any CVC. Locally, `stripe liste
 
 Payment is optional for the app to run. Checkout is disabled until all four Stripe variables are set.
 
+## Email (license keys)
+
+Keys are emailed at purchase and on "Lost key?". Delivery is direct from the host to the recipient's mail server over port 25, no relay (`lib/mail.js`). Requirements:
+
+- Outbound port 25 open on the host's network.
+- An SPF record on the sending domain that lists the host's public IP, or Gmail and Outlook refuse the mail outright (`550 5.7.26`). http.nyc's TXT record: `v=spf1 ip4:<pi public ip> include:spf.efwd.registrar-servers.com ~all`. Update the IP if it changes.
+- `MAIL_FROM` set in the env. Empty disables email; "Lost key?" then says recovery isn't set up.
+
+Expect spam folders anyway. There is no DKIM.
+
 ## Deploy on the Pi
 
 Same pattern as wedding-planning: a standalone Docker container publishing a loopback port, a host-nginx server block in front, TLS at nginx. This one publishes `127.0.0.1:3010` because wedding-planning owns 3000. Redeploys go through the `pi-deploy` repo: a push to `master` here sends it a dispatch event and its runner on the Pi rebuilds this app.
