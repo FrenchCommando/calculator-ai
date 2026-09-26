@@ -98,8 +98,18 @@ window.AI = (() => {
   function mountCounter() {
     const nav = document.querySelector('nav'); if (!nav) return;
     const el = document.createElement('span'); el.style.cssText = 'font-size:12px;color:var(--muted);margin-left:16px'; nav.appendChild(el);
-    const update = () => { el.textContent = `AI mentions on this AI page: ${(document.body.innerText.match(/\bAI\b/g) || []).length} AI`; };
-    new MutationObserver(update).observe(document.body, { childList: true, subtree: true, characterData: true }); update();
+    // textContent, not innerText: innerText forces a full layout of the page on every call.
+    // Count only the rendered regions (scripts live outside them) and skip the counter's own text.
+    const regions = ['header', 'main', 'footer'].map(t => document.querySelector(t)).filter(Boolean);
+    let queued = false;
+    const update = () => {
+      queued = false;
+      el.textContent = '';
+      const n = regions.reduce((s, r) => s + (r.textContent.match(/\bAI\b/g) || []).length, 0);
+      el.textContent = `AI mentions on this AI page: ${n} AI`;
+    };
+    new MutationObserver(() => { if (!queued) { queued = true; requestAnimationFrame(update); } }).observe(document.body, { childList: true, subtree: true, characterData: true });
+    update();
   }
 
   function renderAccount() {

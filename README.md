@@ -44,7 +44,7 @@ Create `apps/<id>/model.js` exporting `meta` and `infer(level, body)` where `lev
 1. Create a Stripe account at stripe.com. Activate it (business details, bank account) to receive real money. Test mode works before activation.
 2. Products → add "http.nyc AI Pro" at $20/month recurring and "http.nyc AI Max" at $200/month recurring. Copy each Price ID into `.env`.
 3. Developers → API keys → secret key into `STRIPE_SECRET_KEY`.
-4. Developers → Webhooks → add endpoint `https://calc.http.nyc/api/webhook` for events `checkout.session.completed`, `invoice.paid`, `customer.subscription.deleted`. Signing secret into `STRIPE_WEBHOOK_SECRET`. Any one subdomain is fine; the key store is shared.
+4. Developers → Webhooks → add endpoint `https://http.nyc/api/webhook` for events `checkout.session.completed`, `invoice.paid`, `customer.subscription.deleted`. Signing secret into `STRIPE_WEBHOOK_SECRET`. Any one subdomain is fine; the key store is shared.
 5. Settings → Billing → Customer portal → enable, so "Manage subscription" works.
 
 Test card: 4242 4242 4242 4242, any future date, any CVC. Locally, `stripe listen --forward-to localhost:3000/api/webhook` gives a `whsec_` for testing.
@@ -64,6 +64,6 @@ First time:
 
 After that, every push to `master` deploys through pi-deploy (requires the `PI_DEPLOY_TOKEN` secret on this repo, see pi-deploy's README). Deploy logs are in pi-deploy's Actions tab. Manual fallback: `git pull && docker compose up -d --build` on the Pi. After an env-only change: `scp` the new `.env.production`, then `docker compose up -d`.
 
-Stripe webhook URL: `https://calc.http.nyc/api/webhook`.
+Stripe webhook URL: `https://http.nyc/api/webhook`.
 
 State is `data/db.json`, bind-mounted from the clone so it survives rebuilds. Back it up alongside the wedding-planning data.
