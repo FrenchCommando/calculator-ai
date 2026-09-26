@@ -132,3 +132,4 @@
 .form .cta { cursor: pointer; border: 0; font-size: 15px; font-family: inherit; }
 code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
 .keys button.pressed { background: #3a4460; }
+.keys button.locked { opacity: .35; cursor: not-allowed; }

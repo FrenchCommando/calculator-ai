@@ -113,7 +113,14 @@
     valEl.textContent = out;
   };
 
-  AI.onAccount(a => document.querySelectorAll('[data-level]').forEach(b => { b.disabled = a.level < +b.dataset.level; b.title = b.disabled ? 'Requires a paid AI plan' : ''; }));
+  const PLAN = ['Free', 'Pro', 'Max'];
+  // Locked keys stay clickable so they can explain themselves (a disabled button swallows the click).
+  AI.onAccount(a => document.querySelectorAll('[data-level]').forEach(b => {
+    const locked = a.level < +b.dataset.level;
+    b.classList.toggle('locked', locked);
+    b.title = locked ? `Requires the ${PLAN[b.dataset.level]} plan` : '';
+  }));
+  const explainLock = b => { AI.toast(`"${b.textContent.trim()}" requires the ${PLAN[b.dataset.level]} plan. See pricing below.`); AI.trace(`AI feature "${b.textContent.trim()}" requires the ${PLAN[b.dataset.level]} plan.`); };
   await AI.init();
 
   async function run() {
@@ -138,11 +145,12 @@
     if (!sel) return;
     e.preventDefault();
     const b = keys.querySelector(sel);
-    if (b && !b.disabled) { b.click(); b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 120); }
+    if (b) { b.click(); b.classList.add('pressed'); setTimeout(() => b.classList.remove('pressed'), 120); }
   });
 
   keys.addEventListener('click', async e => {
-    const b = e.target.closest('button'); if (!b || b.disabled) return;
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.classList.contains('locked')) return explainLock(b);
     if (b.dataset.num !== undefined) {
       const d = b.dataset.num;
       if (d === '.' && cur.includes('.')) return;
