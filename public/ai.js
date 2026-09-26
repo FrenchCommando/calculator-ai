@@ -118,7 +118,14 @@ window.AI = (() => {
     $('planBadge').textContent = acct.plan; $('keyInput').value = acct.key;
     $('quota').textContent = `${config.levelNames[acct.level]} · ${acct.limit.toLocaleString()} AI tokens per ${acct.period} · resets ${new Date(acct.resetAt).toLocaleString()}`;
     $('portal').hidden = !acct.hasSubscription;
-    document.querySelectorAll('[data-plan]').forEach(a => { if (a.dataset.plan === acct.plan) { a.textContent = 'Current plan'; a.classList.add('secondary'); } });
+    const LEVEL = { free: 0, pro: 1, max: 2 }, LABEL = { free: 'Start free', pro: 'Upgrade to Pro', max: 'Go Max' };
+    document.querySelectorAll('[data-plan]').forEach(a => {
+      const p = a.dataset.plan; if (!(p in LEVEL)) return;
+      const cur = p === acct.plan, below = LEVEL[p] < acct.level;
+      a.textContent = cur ? 'Current plan' : below ? 'Included in your plan' : LABEL[p];
+      a.classList.toggle('secondary', cur || below || p === 'free');
+      a.classList.toggle('disabled', below);
+    });
     listeners.forEach(fn => fn(acct));
   }
 

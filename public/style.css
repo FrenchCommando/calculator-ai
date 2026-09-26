@@ -144,3 +144,4 @@ code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-si
 #inputs { margin-top: 12px; }
 nav a.nav-home { color: var(--accent-2); border: 1px solid rgba(46,230,166,.4); border-radius: 999px; padding: 5px 12px; background: rgba(46,230,166,.08); }
 nav a.nav-home:hover { background: rgba(46,230,166,.18); }
+.cta.disabled { opacity: .5; pointer-events: none; }
