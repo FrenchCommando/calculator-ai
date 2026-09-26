@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TimeAI — The AI That Knows What Time It Is</title>
+<meta name="description" content="TimeAI is the first AI that knows what time it is, right now, in any timezone.">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="logo">Time<span>AI</span> <small style="color:var(--muted);font-weight:400;font-size:12px">by AI, for AI</small></div>
+  <nav><a href="#product">AI Product</a><a href="#reviews">AI Customers</a><a href="#pricing">AI Pricing</a><a href="#family">More AI</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <div class="pill">AI &middot; Real-time AI &middot; Quartz-aligned</div>
+    <h1>The first AI that knows <em>what time it is</em>.</h1>
+    <p>Right now. In any timezone. The AI checks a clock so you don't have to. Deterministic* (*the input changes; the AI does not). Fully vibecoded with AI in a few minutes while drinking coffee.</p>
+    <a class="cta" href="#product">Try AI free</a>
+    <a class="cta secondary" href="#pricing">See AI pricing</a>
+  </div>
+
+  <section>
+    <h2>Why AI teams are switching to TimeAI</h2>
+    <p class="sub">Legacy clocks just&hellip; ticked, without AI.</p>
+    <div class="grid three">
+      <div class="card"><h3>Real-time AI inference</h3><p>Every AI answer is computed at the AI moment you ask. Ask the AI again and the AI answer is newer. This is called AI freshness.</p></div>
+      <div class="card"><h3>Timezone AI</h3><p>Pro AI supports every IANA timezone, including the ones with 45-minute offsets. The AI does not judge them.</p></div>
+      <div class="card"><h3>Predictive AI</h3><p>Max AI can tell you what time it will be in N hours. Our AI forecasts have a 100% AI hit rate, verified N hours later.</p></div>
+      <div class="card"><h3>NTP-aligned AI</h3><p>The AI clock is AI-synchronized to atomic clocks via NTP. The atoms are not AI, but everything after them is.</p></div>
+      <div class="card"><h3>Epoch AI</h3><p>Max AI includes the Unix epoch, the number of seconds since the AI began (1970).</p></div>
+      <div class="card"><h3>Millisecond AI</h3><p>Pro AI adds three more digits. Each digit is an AI output token. This is AI value.</p></div>
+    </div>
+  </section>
+
+  <section id="product">
+    <h2>Meet the AI model, AI</h2>
+    <p class="sub">TimeAI-1 (32.768 kHz AI architecture). Every AI inference reads the AI clock once.</p>
+    <div class="product">
+      <div class="calc">
+        <div class="display"><div class="expr" id="expr">&nbsp;</div><div class="val" id="val" style="font-size:22px">–</div></div>
+        <div class="form">
+          <label>AI task
+            <select id="task">
+              <option value="now">Current time</option>
+              <option value="future" data-level="2">Time in N hours (Max)</option>
+            </select></label>
+          <label>Timezone <input id="tz" value="UTC" list="tzs" data-level="1" title="Other timezones require Pro"><datalist id="tzs"></datalist></label>
+          <label id="hWrap" hidden>Hours <input type="number" id="hours" value="24"></label>
+          <button class="cta" id="go" style="width:100%;text-align:center">Run AI inference</button>
+        </div>
+        <div id="ai-status"></div>
+      </div>
+      <div class="log" id="ai-trace"></div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <h2>Loved by people who need to know the AI time</h2>
+    <p class="sub">Which is everyone. AI.</p>
+    <div class="grid three">
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"I asked the AI what time it was. The AI told me. I looked at my watch. The AI was right. I threw away my watch. AI."</blockquote><div class="who"><b>Lena O.</b> &middot; Former AI Watch Owner</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"Our AI standups span 4 AI timezones. TimeAI Pro tells each of us the AI time. We still all show up AI-late but now it's AI-documented."</blockquote><div class="who"><b>Kwame A.</b> &middot; AI Engineering Manager</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"The AI predicted the time 24 hours from now. I waited 24 hours. The AI was exactly right. This is AI superintelligence."</blockquote><div class="who"><b>Dev M.</b> &middot; AI Futurist</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><blockquote>"Asked the AI the time in Kathmandu. The AI said +05:45. I did not believe the AI. I was wrong. Docked an AI star for making me feel AI-bad."</blockquote><div class="who"><b>Sam R.</b> &middot; AI Traveler</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"Milliseconds. The AI gives me milliseconds. I do not need them. I pay for them. AI."</blockquote><div class="who"><b>Olu B.</b> &middot; AI High-Frequency Enjoyer</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"AI."</blockquote><div class="who"><b>Chad W.</b> &middot; AI</div></div>
+    </div>
+  </section>
+
+  <section id="pricing"><div id="ai-pricing"></div></section>
+  <section id="family"><h2>More AI from http.nyc</h2><p class="sub">One AI license. Every AI app.</p><div class="grid three" id="ai-family"></div></section>
+</main>
+<footer>&copy; 2026 http.nyc AI, Inc. &middot; An AI company. &middot; Fully vibecoded with AI in a few minutes while drinking coffee. &middot; TimeAI may produce the correct AI time. Please AI-verify with a second AI clock. AI.</footer>
+
+<script src="/ai.js"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const tzs = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : ['UTC', 'America/New_York', 'Europe/Paris', 'Asia/Tokyo'];
+  $('tzs').innerHTML = tzs.map(z => `<option value="${z}">`).join('');
+  const sync = () => { $('hWrap').hidden = $('task').value !== 'future'; };
+  $('task').onchange = sync; sync();
+  AI.onAccount(acct => {
+    document.querySelectorAll('#task option[data-level]').forEach(o => o.disabled = acct.level < +o.dataset.level);
+    $('tz').disabled = acct.level < 1; if (acct.level < 1) $('tz').value = 'UTC';
+  });
+  await AI.init();
+  $('go').onclick = async () => {
+    const body = { task: $('task').value, tz: $('tz').value.trim() || 'UTC', hours: $('hours').value, keystrokes: 1 + ($('tz').value === 'UTC' ? 0 : $('tz').value.length) + ($('hWrap').hidden ? 0 : String($('hours').value).length) };
+    $('expr').textContent = `${body.task === 'future' ? 'time in ' + body.hours + ' h' : 'now'} · ${body.tz}`;
+    const r = await AI.infer(body);
+    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused') : r.result;
+  };
+})();
+</script>
+</body>
+</html>

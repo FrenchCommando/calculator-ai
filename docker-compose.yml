@@ -1,0 +1,18 @@
+name: http-nyc-ai
+
+# Standalone, same pattern as wedding-planning: publishes a loopback host port
+# and is reached by a host-nginx server block (deploy/nginx/http-nyc-ai.conf).
+# wedding-planning already owns 127.0.0.1:3000 on the Pi, so this one takes 3010.
+
+services:
+  app:
+    build: .
+    container_name: http-nyc-ai
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    ports:
+      - "127.0.0.1:3010:3000"
+    volumes:
+      # License keys and token counters. Bind-mounted so it survives rebuilds.
+      - ./data:/app/data

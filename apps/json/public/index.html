@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JsonAI — Your Prompt, In A JSON</title>
+<meta name="description" content="JsonAI takes a prompt and puts it in a JSON, with all the right escapes. Deterministically.">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="logo">Json<span>AI</span> <small style="color:var(--muted);font-weight:400;font-size:12px">by AI, for AI</small></div>
+  <nav><a href="#product">AI Product</a><a href="#reviews">AI Customers</a><a href="#pricing">AI Pricing</a><a href="#family">More AI</a></nav>
+</header>
+<main>
+  <div class="hero">
+    <div class="pill">AI &middot; RFC 8259 AI-compliant &middot; Escapes included</div>
+    <h1>Your prompt. <em>In a JSON.</em></h1>
+    <p>Paste a prompt. The AI returns <code>{"prompt": "…"}</code> with every quote, backslash, and newline AI-escaped. The AI has never once forgotten a backslash. Fully vibecoded with AI in a few minutes while drinking coffee.</p>
+    <a class="cta" href="#product">Try AI free</a>
+    <a class="cta secondary" href="#pricing">See AI pricing</a>
+  </div>
+
+  <section>
+    <h2>Why AI teams are switching to JsonAI</h2>
+    <p class="sub">The last mile of every AI pipeline is a string inside curly braces. We AI-automated it.</p>
+    <div class="grid three">
+      <div class="card"><h3>Every escape, every AI time</h3><p>Quotes become \". Backslashes become \\. Newlines become \n. Tabs become \t. The AI has AI-memorized all of them. There are six.</p></div>
+      <div class="card"><h3>AI-injection safe</h3><p>Your prompt cannot escape the string. The AI makes sure of it. This is the only AI product where "prompt injection" is a JSON feature.</p></div>
+      <div class="card"><h3>AI-native output</h3><p>Max AI wraps your prompt in a <code>messages</code> array so it is ready for a real AI. We are the AI before the AI.</p></div>
+      <div class="card"><h3>Unicode AI escaping</h3><p>Max AI turns every emoji into \uXXXX pairs for maximum AI compatibility with systems from 1999.</p></div>
+      <div class="card"><h3>Pretty-printed AI</h3><p>Pro AI adds two spaces of indentation. Each space is an AI output token. This is AI value.</p></div>
+      <div class="card"><h3>Validated AI</h3><p>Every AI output is AI-validated by parsing it back. It has passed 100% of AI tests. The AI is confident.</p></div>
+    </div>
+  </section>
+
+  <section id="product">
+    <h2>Meet the AI model, AI</h2>
+    <p class="sub">JsonAI-1 (string-quantized, 1-key AI architecture). Every AI character in is an AI token. Every AI character out is an AI token. Escapes are AI-free.</p>
+    <div class="product">
+      <div class="calc">
+        <div class="form">
+          <label>Prompt <textarea id="prompt" rows="6" placeholder='Say "hello"\n…and put a backslash \ in it'></textarea></label>
+          <div class="row">
+            <label>Key <input id="name" value="prompt" data-level="1" title="Custom keys require Pro"></label>
+            <label class="chk"><input type="checkbox" id="pretty" data-level="1"> Pretty (Pro)</label>
+            <label class="chk"><input type="checkbox" id="nested" data-level="2"> Messages array (Max)</label>
+            <label class="chk"><input type="checkbox" id="ascii" data-level="2"> \uXXXX (Max)</label>
+          </div>
+          <button class="cta" id="go" style="width:100%;text-align:center">Run AI inference</button>
+        </div>
+        <div class="display" style="margin-top:14px"><pre id="val" style="margin:0;white-space:pre-wrap;word-break:break-all;font-size:14px">–</pre></div>
+        <div class="acct"><button class="btn" id="copy">Copy AI JSON</button></div>
+        <div id="ai-status"></div>
+      </div>
+      <div class="log" id="ai-trace"></div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <h2>Loved by AI prompt engineers</h2>
+    <p class="sub">And their AI managers.</p>
+    <div class="grid three">
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"My prompt had a quote in it. The AI escaped it. I have been a Senior AI Engineer for 6 AI months and I did not know this was possible."</blockquote><div class="who"><b>Blake T.</b> &middot; Senior AI Prompt Engineer III</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"We used to hand-write our JSON. Our AI pipeline broke every AI Tuesday. Now the AI writes the JSON and the AI pipeline breaks for AI reasons instead."</blockquote><div class="who"><b>Noor E.</b> &middot; AI Platform Lead</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"I pasted a 2,000 character AI prompt. The AI said it needed Pro. I paid. The AI put it in a JSON. Worth every AI cent."</blockquote><div class="who"><b>Ahmed B.</b> &middot; AI Founder, AI stealth AI (repeat AI customer)</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><blockquote>"Asked the AI to put my prompt in a JSON. It did. Then I asked the AI to answer the prompt. It did not. Docked an AI star. Still the best AI JSON."</blockquote><div class="who"><b>Sofia L.</b> &middot; VP of AI Product AI Velocity</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"{\"review\": \"AI.\"}"</blockquote><div class="who"><b>Chad W.</b> &middot; AI</div></div>
+      <div class="card review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>"The AI turned my emoji into 🚀. I do not know what that means. The AI does. AI."</blockquote><div class="who"><b>Priya M.</b> &middot; AI CFO (AI-first, AI-native, AI)</div></div>
+    </div>
+  </section>
+
+  <section id="pricing"><div id="ai-pricing"></div></section>
+  <section id="family"><h2>More AI from http.nyc</h2><p class="sub">One AI license. Every AI app.</p><div class="grid three" id="ai-family"></div></section>
+</main>
+<footer>&copy; 2026 http.nyc AI, Inc. &middot; An AI company. &middot; Fully vibecoded with AI in a few minutes while drinking coffee. &middot; JsonAI may produce valid AI JSON. Please AI-verify with a second AI parser. AI.</footer>
+
+<script src="/ai.js"></script>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  AI.onAccount(acct => document.querySelectorAll('[data-level]').forEach(el => { el.disabled = acct.level < +el.dataset.level; }));
+  await AI.init();
+  $('go').onclick = async () => {
+    const r = await AI.infer({ prompt: $('prompt').value, name: $('name').value.trim() || 'prompt', pretty: $('pretty').checked, nested: $('nested').checked, ascii: $('ascii').checked });
+    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused: ' + r.error) : r.result;
+  };
+  $('copy').onclick = () => navigator.clipboard.writeText($('val').textContent).then(() => AI.toast('AI JSON copied.'), () => AI.toast('Copy failed.'));
+})();
+</script>
+</body>
+</html>

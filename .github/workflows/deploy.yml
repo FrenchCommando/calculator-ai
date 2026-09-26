@@ -1,0 +1,21 @@
+name: Deploy
+
+# Sends a deploy event to FrenchCommando/pi-deploy, whose self-hosted runner on
+# the Pi pulls this repo's clone and rebuilds the container. See that repo's
+# README. Needs the PI_DEPLOY_TOKEN secret (fine-grained PAT, pi-deploy only).
+on:
+  push:
+    branches: [master]
+
+permissions: {}
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PI_DEPLOY_TOKEN }}
+          repository: FrenchCommando/pi-deploy
+          event-type: deploy
+          client-payload: '{"app": "calculator-ai", "sha": "${{ github.sha }}"}'

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to AI</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><div class="logo"><a href="/" style="color:inherit;text-decoration:none">http.nyc <span>AI</span></a></div></header>
+<main style="max-width:640px;text-align:center;padding-top:80px">
+  <div class="pill">AI payment AI successful</div>
+  <h1 style="font-size:40px;letter-spacing:-1px">Welcome to <em id="plan" style="font-style:normal;color:var(--accent-2)">AI</em>.</h1>
+  <p style="color:var(--muted)">Your AI license key is below. It works on every AI app under http.nyc and has been saved in this browser. Keep a copy: it is how the AI knows you paid for AI.</p>
+  <div class="card" style="margin:24px 0"><div id="key" style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:20px;word-break:break-all">Verifying AI payment…</div></div>
+  <a class="cta" href="/#product">Start AI computing</a>
+</main>
+<script>
+(async () => {
+  const id = new URLSearchParams(location.search).get('session_id');
+  const r = await fetch('/api/session?session_id=' + encodeURIComponent(id));
+  const d = await r.json();
+  if (!r.ok) { document.getElementById('key').textContent = d.error; return; }
+  document.getElementById('key').textContent = d.key;
+  document.getElementById('plan').textContent = 'AI ' + d.plan[0].toUpperCase() + d.plan.slice(1);
+  try { localStorage.setItem('ai_key', d.key); } catch {}
+})();
+</script>
+</body>
+</html>
