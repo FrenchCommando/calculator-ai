@@ -104,9 +104,14 @@
 <script>
 (async () => {
   const exprEl = document.getElementById('expr'), valEl = document.getElementById('val');
-  let cur = '0', prev = null, op = null, fresh = true, keystrokes = 0;
+  let cur = '0', prev = null, op = null, fresh = true, keystrokes = 0, out = '0';
   const symbol = o => ({ '+': '+', '-': '−', '*': '×', '/': '÷' })[o] || '';
-  const render = () => { valEl.textContent = cur; exprEl.innerHTML = prev !== null ? `${prev} ${symbol(op)}` : '&nbsp;'; };
+  // Top line: the prompt as it is typed. Big line: AI output only.
+  const render = () => {
+    exprEl.textContent = prev !== null ? `${prev} ${symbol(op)} ${fresh ? '' : cur}` : (fresh ? '' : cur);
+    if (!exprEl.textContent) exprEl.innerHTML = '&nbsp;';
+    valEl.textContent = out;
+  };
 
   AI.onAccount(a => document.querySelectorAll('[data-level]').forEach(b => { b.disabled = a.level < +b.dataset.level; b.title = b.disabled ? 'Requires a paid AI plan' : ''; }));
   await AI.init();
@@ -114,7 +119,7 @@
   async function run() {
     const r = await AI.infer({ a: prev, op, b: cur, keystrokes: keystrokes + 1 });
     if (r.error) { if (r.code === 'quota') { valEl.textContent = 'AI QUOTA'; exprEl.textContent = 'AI token limit reached. Upgrade to continue AI computing.'; } return false; }
-    cur = r.result; prev = null; op = null; fresh = true; keystrokes = 0; render(); return true;
+    out = r.result; cur = r.result; prev = null; op = null; fresh = true; keystrokes = 0; render(); return true;
   }
 
   document.querySelector('.keys').addEventListener('click', async e => {
@@ -130,7 +135,7 @@
       op = b.dataset.op; prev = cur; fresh = true; keystrokes++; AI.trace(`AI planning: AI user intends to ${symbol(op)}`); render(); return;
     }
     switch (b.dataset.act) {
-      case 'clear': cur = '0'; prev = null; op = null; fresh = true; keystrokes = 0; AI.trace('AI context window AI-cleared.'); render(); break;
+      case 'clear': cur = '0'; out = '0'; prev = null; op = null; fresh = true; keystrokes = 0; AI.trace('AI context window AI-cleared.'); render(); break;
       case 'neg': cur = cur.startsWith('-') ? cur.slice(1) : '-' + cur; keystrokes++; render(); break;
       case 'pct': cur = String(parseFloat(cur) / 100); keystrokes++; render(); break;
       case 'eq': if (prev === null || op === null) AI.trace('No AI operator in AI context. AI returning AI input unchanged (deterministic AI).'); else await run(); break;
