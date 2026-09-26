@@ -4,6 +4,7 @@ import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { createBilling, PLANS, LEVEL_NAME } from './lib/billing.js';
+import { send as sendMail, keyEmail, mailEnabled } from './lib/mail.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadDotenv(path.join(__dirname, '.env'));
@@ -29,6 +30,8 @@ const billing = createBilling({
   webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
   prices: { pro: process.env.STRIPE_PRICE_PRO, max: process.env.STRIPE_PRICE_MAX },
   baseUrlFor,
+  // Email the key at purchase, so a closed tab on the success page loses nothing.
+  onKeyMinted: (key, acct) => { if (acct.email) sendMail({ to: acct.email, ...keyEmail({ key, plan: acct.plan, baseUrl: baseUrlFor(acct.app || 'calc') }) }).catch(() => {}); },
 });
 
 const app = express();
@@ -53,7 +56,7 @@ const keyFrom = req => req.body?.key || req.query.key || (req.headers.cookie || 
 const publicApp = a => ({ id: a.id, name: a.name, model: a.model, tagline: a.tagline, features: a.features });
 
 app.get('/api/config', (req, res) => res.json({
-  payments: billing.paymentsEnabled, salesEmail: SALES_EMAIL, plans: PLANS, levelNames: LEVEL_NAME,
+  payments: billing.paymentsEnabled, mail: mailEnabled, salesEmail: SALES_EMAIL, plans: PLANS, levelNames: LEVEL_NAME,
   app: req.app_ ? publicApp(req.app_) : null,
   apps: Object.values(APPS).map(a => ({ ...publicApp(a), url: baseUrlFor(a.id) })),
 }));
@@ -92,10 +95,13 @@ app.get('/api/session', async (req, res) => {
   catch (e) { res.status(402).json({ error: e.message }); }
 });
 
-app.post('/api/recover', (req, res) => {
-  const keys = billing.recover(req.body.email);
-  if (!keys.length) return res.status(404).json({ error: 'No paid license found for that email.' });
-  res.json({ keys });
+// Lost key: email it to the checkout address. Same reply whether or not a key exists.
+app.post('/api/recover', async (req, res) => {
+  if (!mailEnabled) return res.status(503).json({ error: 'Key recovery is not set up yet. Reply to your Stripe receipt instead.' });
+  const email = String(req.body.email || '').trim();
+  const keys = billing.recover(email);
+  for (const { key, plan } of keys) await sendMail({ to: email, ...keyEmail({ key, plan, baseUrl: baseUrlFor(req.app_?.id || 'calc') }) });
+  res.json({ ok: true, message: 'If a paid license exists for that email, the key has been sent to it.' });
 });
 
 app.post('/api/portal', async (req, res) => {

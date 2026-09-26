@@ -40,15 +40,14 @@ window.AI = (() => {
         <span class="badge-plan" id="planBadge">free</span>
         <input id="keyInput" placeholder="License key (ai_…)" spellcheck="false">
         <button id="keySave">Use key</button>
-        <button id="keyRecover" title="Look up your key by the email used at checkout">Lost key?</button>
+        <button id="keyRecover" title="Email the key to the address used at checkout">Lost key?</button>
         <button id="portal" hidden>Manage subscription</button>
       </div>`;
     $('keySave').onclick = () => loadAccount($('keyInput').value.trim());
     $('keyRecover').onclick = async () => {
       const email = prompt('Email used at checkout:'); if (!email) return;
       const d = await api('/api/recover', { method: 'POST', body: JSON.stringify({ email }) });
-      if (!d.ok) return toast(d.error);
-      await loadAccount(d.keys[0].key); toast(`AI license restored: ${d.keys[0].plan}`);
+      toast(d.ok ? d.message : d.error);
     };
     $('portal').onclick = async () => { const d = await api('/api/portal', { method: 'POST', body: JSON.stringify({ key: acct.key }) }); if (d.url) location.href = d.url; else toast(d.error); };
   }
