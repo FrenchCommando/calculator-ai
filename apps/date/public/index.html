@@ -120,7 +120,7 @@
     if (t === 'weekdayof') body.date = $('date').value;
     $('expr').textContent = `${LABEL[t]}${body.n !== undefined ? ' ' + body.n : ''}${body.date ? ' ' + body.date : ''}`;
     const r = await AI.infer(body);
-    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused') : r.result;
+    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused: ' + r.error) : r.result;
   }
 
   document.querySelectorAll('[data-task]').forEach(b => b.onclick = () => {

@@ -46,7 +46,7 @@
               <option value="now">Current time</option>
               <option value="future" data-level="2">Time in N hours (Max)</option>
             </select></label>
-          <label>Timezone <input id="tz" value="UTC" list="tzs" data-level="1" title="Other timezones require Pro"><datalist id="tzs"></datalist></label>
+          <label>Timezone <select id="tz" data-level="1" title="Other timezones require Pro"><option value="UTC">UTC</option></select></label>
           <label id="hWrap" hidden>Hours <input type="number" id="hours" value="24"></label>
           <button class="cta" id="go" style="width:100%;text-align:center">Run AI inference</button>
         </div>
@@ -79,7 +79,8 @@
 (async () => {
   const $ = id => document.getElementById(id);
   const tzs = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : ['UTC', 'America/New_York', 'Europe/Paris', 'Asia/Tokyo'];
-  $('tzs').innerHTML = tzs.map(z => `<option value="${z}">`).join('');
+  const local = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  $('tz').innerHTML = ['UTC', ...tzs.filter(z => z !== 'UTC')].map(z => `<option value="${z}">${z}${z === local ? ' (yours)' : ''}</option>`).join('');
   const sync = () => { $('hWrap').hidden = $('task').value !== 'future'; };
   $('task').onchange = sync; sync();
   AI.onAccount(acct => {
@@ -91,7 +92,7 @@
     const body = { task: $('task').value, tz: $('tz').value.trim() || 'UTC', hours: $('hours').value, keystrokes: 1 + ($('tz').value === 'UTC' ? 0 : $('tz').value.length) + ($('hWrap').hidden ? 0 : String($('hours').value).length) };
     $('expr').textContent = `${body.task === 'future' ? 'time in ' + body.hours + ' h' : 'now'} · ${body.tz}`;
     const r = await AI.infer(body);
-    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused') : r.result;
+    $('val').textContent = r.error ? (r.code === 'quota' ? 'AI QUOTA' : 'AI refused: ' + r.error) : r.result;
   };
 })();
 </script>
