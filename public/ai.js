@@ -123,11 +123,13 @@ window.AI = (() => {
   }
 
   // ---------- account ----------
-  async function loadAccount(key) {
+  async function loadAccount(key, quiet = false) {
     if (!key) return false;
     const d = await api('/api/me?key=' + encodeURIComponent(key));
-    if (d.ok) { acct = d; try { localStorage.setItem('ai_key', key); } catch {} renderAccount(); return true; }
-    toast(d.error || 'Unknown AI license key.');
+    if (d.ok) { acct = d; try { localStorage.setItem('ai_key', key); } catch {} renderAccount(); if (!quiet) toast(`Using ${config.levelNames[d.level]} key ${key}`); return true; }
+    // Rejected: make the active state unambiguous by snapping the box back to the key in use.
+    if (acct && $('keyInput')) $('keyInput').value = acct.key;
+    if (!quiet) toast(`${d.error || 'Unknown AI license key.'}${acct ? ` Still using your ${config.levelNames[acct.level]} key.` : ''}`);
     return false;
   }
   function storedKey() {
@@ -140,7 +142,7 @@ window.AI = (() => {
   async function init() {
     config = await api('/api/config');
     mountStatus(); mountTrace(); mountPricing(); mountFamily(); mountCounter();
-    if (!(await loadAccount(storedKey()))) {
+    if (!(await loadAccount(storedKey(), true))) {
       const d = await api('/api/free-key', { method: 'POST' });
       acct = d; try { localStorage.setItem('ai_key', d.key); } catch {}
       renderAccount();
