@@ -133,3 +133,4 @@
 code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
 .keys button.pressed { background: #3a4460; }
 .keys button.locked { opacity: .35; cursor: not-allowed; }
+.logo a.home { color: inherit; text-decoration: none; }

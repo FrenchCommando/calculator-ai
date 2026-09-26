@@ -56,6 +56,7 @@ const keyFrom = req => req.body?.key || req.query.key || (req.headers.cookie || 
 const publicApp = a => ({ id: a.id, name: a.name, model: a.model, tagline: a.tagline, features: a.features });
 
 app.get('/api/config', (req, res) => res.json({
+  home: `${SCHEME}://${ROOT_DOMAIN}${portSuffix}`,
   payments: billing.paymentsEnabled, mail: mailEnabled, salesEmail: SALES_EMAIL, plans: PLANS, levelNames: LEVEL_NAME,
   app: req.app_ ? publicApp(req.app_) : null,
   apps: Object.values(APPS).map(a => ({ ...publicApp(a), url: baseUrlFor(a.id) })),

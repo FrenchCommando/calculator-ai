@@ -142,6 +142,7 @@ window.AI = (() => {
   async function init() {
     config = await api('/api/config');
     mountStatus(); mountTrace(); mountPricing(); mountFamily(); mountCounter();
+    if (config.home) document.querySelectorAll('a.home').forEach(l => l.href = config.home);
     if (!(await loadAccount(storedKey(), true))) {
       const d = await api('/api/free-key', { method: 'POST' });
       acct = d; try { localStorage.setItem('ai_key', d.key); } catch {}
