@@ -13,9 +13,11 @@ jobs:
   dispatch:
     runs-on: ubuntu-latest
     steps:
-      - uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PI_DEPLOY_TOKEN }}
-          repository: FrenchCommando/pi-deploy
-          event-type: deploy
-          client-payload: '{"app": "calculator-ai", "sha": "${{ github.sha }}"}'
+      - name: Send repository_dispatch to pi-deploy
+        env:
+          GH_TOKEN: ${{ secrets.PI_DEPLOY_TOKEN }}
+        run: >
+          gh api repos/FrenchCommando/pi-deploy/dispatches
+          -f event_type=deploy
+          -f 'client_payload[app]=calculator-ai'
+          -f "client_payload[sha]=${GITHUB_SHA}"
